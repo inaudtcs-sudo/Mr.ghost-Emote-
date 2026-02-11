@@ -235,13 +235,13 @@
 </head>
 <body>
 
-<audio id="bg-music" loop>
+<audio id="bg-music" loop preload="auto">
     <source src="https://image2url.com/r2/default/audio/1770380186370-7891b55e-e401-418a-b9ac-79926d6eddad.mp3" type="audio/mpeg">
 </audio>
 
 <div id="music-control" onclick="toggleMusic()" style="
     position: fixed;
-    bottom: 25px;
+    top: 25px;      /* আইকন এখন উপরে */
     right: 25px;
     width: 50px;
     height: 50px;
@@ -263,7 +263,27 @@
     const musicIcon = document.getElementById('music-icon');
     let isMuted = false;
 
-    // মিউজিক কন্ট্রোল ফাংশন
+    // মিউজিক চালু করার ফাংশন
+    function startMusic() {
+        music.play().then(() => {
+            console.log("Music started");
+        }).catch(err => {
+            console.log("Waiting for user interaction");
+        });
+    }
+
+    // অটো-প্লে লজিক: স্ক্রিনে যেকোনো জায়গায় ক্লিক করলেই বাজবে
+    window.addEventListener('click', () => {
+        if (!isMuted) {
+            startMusic();
+        }
+    }, { once: true });
+
+    // মাউস নড়াচড়া বা স্ক্রল করলেও চেষ্টা করবে (অটোমেটিক বাজার সম্ভাবনা বাড়বে)
+    window.addEventListener('scroll', () => {
+        if (!isMuted) startMusic();
+    }, { once: true });
+
     function toggleMusic() {
         if (!isMuted) {
             music.muted = true;
@@ -281,29 +301,10 @@
         }
     }
 
-    // ইউজার স্ক্রিনে প্রথমবার ক্লিক করলেই মিউজিক শুরু হবে (ব্রাউজার সিকিউরিটির জন্য প্রয়োজন)
-    window.addEventListener('click', () => {
-        if (music.paused && !isMuted) {
-            music.play();
-        }
-    }, { once: true });
-
-    // পেজ লোড হওয়ার পর অটোমেটিক চেষ্টা করবে (কিছু ব্রাউজারে কাজ করতে পারে)
-    window.onload = () => {
-    // লগইন ভিউ থাকলে সেটা হাইড করবে এবং মেইন প্যানেল শো করবে
-    const loginView = document.getElementById('view-g');
-    const mainPanel = document.getElementById('view-panel');
-    
-    if (loginView) loginView.style.display = 'none'; // লগইন পেজ হাইড
-    if (mainPanel) mainPanel.classList.remove('hidden'); // মেইন প্যানেল শো
-    
-    renderEmotes();  // ইমোটগুলো লোড করবে
-    renderServers(); // সার্ভার লিস্ট রেডি করবে
-    showToast("🔥 GHOST EMOTES UNLOCKED");
-};
-
-
+    // উইন্ডো লোড হওয়ার সাথে সাথেই চেষ্টা করবে
+    window.onload = startMusic;
 </script>
+
 
 
 
