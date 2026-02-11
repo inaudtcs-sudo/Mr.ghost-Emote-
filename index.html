@@ -289,109 +289,26 @@
     }, { once: true });
 
     // পেজ লোড হওয়ার পর অটোমেটিক চেষ্টা করবে (কিছু ব্রাউজারে কাজ করতে পারে)
-    window.onload = function() {
-        music.play().catch(() => {
-            console.log("অটো-প্লে ব্লক হয়েছে, ইউজারের ক্লিকের অপেক্ষা করা হচ্ছে...");
-        });
-    }
+    window.onload = () => {
+    // লগইন ভিউ থাকলে সেটা হাইড করবে এবং মেইন প্যানেল শো করবে
+    const loginView = document.getElementById('view-g');
+    const mainPanel = document.getElementById('view-panel');
+    
+    if (loginView) loginView.style.display = 'none'; // লগইন পেজ হাইড
+    if (mainPanel) mainPanel.classList.remove('hidden'); // মেইন প্যানেল শো
+    
+    renderEmotes();  // ইমোটগুলো লোড করবে
+    renderServers(); // সার্ভার লিস্ট রেডি করবে
+    showToast("🔥 GHOST EMOTES UNLOCKED");
+};
+
+
 </script>
 
 
 
 <canvas id="bg-canvas"></canvas>
-<div id="toast-container"></div>
 
-<div id="view-g" class="login-view" style="background: #f0f4f8; min-height: 100vh; display: flex; align-items: center; justify-content: center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
-    <div id="login-container" style="
-        max-width: 380px; 
-        width: 90%; 
-        padding: 40px 25px; 
-        background: #ffffff;
-        border-radius: 30px;
-        box-shadow: 0 20px 40px rgba(0,0,0,0.05);
-        border: 1px solid #e1e8ed;
-        display: flex; 
-        flex-direction: column; 
-        align-items: center; 
-        position: relative;
-        overflow: hidden;">
-
-        <div style="width: 100%; display: flex; align-items: center; gap: 15px; margin-bottom: 25px; padding-left: 10px;">
-            <div style="background: #f1f3f5; padding: 10px; border-radius: 12px;">
-                <i class="fa-solid fa-shield-halved" style="color: #333; font-size: 1.2rem;"></i>
-            </div>
-            <div>
-                <h2 style="margin: 0; font-size: 1.1rem; color: #1a1a1a; letter-spacing: 0.5px; font-weight: 800; text-transform: uppercase;">GHOST EMOTE CHEATS</h2>
-                <p style="margin: 0; font-size: 0.75rem; color: #7f8c8d;">Enter your credentials to continue</p>
-            </div>
-        </div>
-        
-        <div style="position: relative; margin-bottom: 30px;">
-            <div style="width: 130px; height: 130px; border-radius: 50%; padding: 4px; background: linear-gradient(45deg, #00f2ff, #00d1ff); box-shadow: 0 10px 20px rgba(0, 242, 255, 0.2);">
-                <img src="https://i.ibb.co.com/PGPsJcV8/IMG-20260210-012406.png" alt="Logo" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 4px solid #fff;">
-            </div>
-        </div>
-        
-        <div style="width: 100%; background: #f8f9fa; border-radius: 20px; padding: 25px 15px; margin-bottom: 25px; border: 1px solid #edf2f7;">
-            <div class="input-wrapper" style="width: 100%; margin-bottom: 15px; position: relative;">
-                <i class="fa-solid fa-key" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #bdc3c7;"></i>
-                <input type="password" id="login-pass" placeholder="ACCESS KEY" style="
-                    width: 100%;
-                    text-align: center; 
-                    padding: 15px 10px 15px 35px;
-                    border-radius: 12px; 
-                    border: 1px solid #e2e8f0; 
-                    background: #fff;
-                    font-weight: 600;
-                    letter-spacing: 2px;
-                    box-sizing: border-box;
-                    color: #2d3436;
-                    outline: none;">
-            </div>
-            
-            <button onclick="window.open('https://t.me/YOUR_TELEGRAM_LINK')" style="
-                width: 100%; 
-                padding: 14px; 
-                border-radius: 12px; 
-                background: #4a90e2; 
-                color: #fff; 
-                border: none; 
-                font-weight: 600; 
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 8px;
-                box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);">
-                <i class="fa-solid fa-download" style="font-size: 0.9rem;"></i> Get Password
-            </button>
-        </div>
-        
-        <button onclick="handleLogin()" class="verify-btn" style="
-            width: 100%; 
-            padding: 18px; 
-            border-radius: 15px; 
-            font-weight: 700; 
-            text-transform: uppercase; 
-            letter-spacing: 1px; 
-            cursor: pointer; 
-            background: #44bd32; 
-            color: #fff; 
-            border: none;
-            box-shadow: 0 6px 20px rgba(68, 189, 50, 0.25);
-            transition: 0.3s;
-            font-size: 0.95rem;">
-            ACCESS SYSTEM
-        </button>
-
-        <div style="margin-top: 25px; display: flex; align-items: center; gap: 8px;">
-            <span style="width: 8px; height: 8px; background: #2ecc71; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #2ecc71;"></span>
-            <span style="font-size: 0.7rem; color: #7f8c8d; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">
-                Ghost Encryption Active v3.0
-            </span>
-        </div>
-    </div>
-</div>
 
 
 <style>
@@ -441,7 +358,7 @@
     </div>
 </div>
 
-<div id="view-panel" class="container hidden">
+<div id="view-panel" class="container"> 
     <header style="border-bottom: 2px solid var(--cyber-blue); position: relative; overflow: hidden;">
         <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(0, 242, 255, 0.05), transparent); animation: scan 3s linear infinite;"></div>
         
@@ -759,10 +676,7 @@ passInput.disabled = true;
 
         if(!tc || uids.length === 0) return showToast("Enter TC & at least one UID!");
 
-        const loader = document.createElement('div');
-        loader.style.cssText = "position:absolute; inset:0; background:rgba(0,0,0,0.8); display:flex; justify-content:center; align-items:center; border-radius:10px;";
-        loader.innerHTML = '<div class="spinner" style="display:block"></div>';
-        element.appendChild(loader);
+      
 
         for (let uid of uids) {
             const finalUrl = `${selectedApi}/join?tc=${tc}&uid1=${uid}&uid2={uid2}&uid3={uid3}&uid4={uid4}&uid5={uid5}&uid6={uid6}&emote_id=${emoteId}`;
@@ -809,7 +723,16 @@ passInput.disabled = true;
         setTimeout(() => t.remove(), 2500); 
     }
 
-    window.onload = () => { renderServers(); };
+    window.onload = () => {
+    // প্যানেল সরাসরি দেখাবে
+    const mainPanel = document.getElementById('view-panel');
+    if (mainPanel) mainPanel.classList.remove('hidden');
+    
+    // ডাটা রেন্ডার করবে
+    renderServers(); 
+    renderEmotes(); 
+    showToast("🔥 ALL EMOTES UNLOCKED");
+};
 
     const canvas = document.getElementById('bg-canvas');
     const ctx = canvas.getContext('2d');
